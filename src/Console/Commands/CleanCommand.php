@@ -2,7 +2,9 @@
 
 namespace Emfits\CDCleaner\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class CleanCommand extends Command
 {
@@ -26,29 +28,43 @@ class CleanCommand extends Command
      */
     public function handle(): void
     {
-        $current = $this->argument('current');
-        $commandFile = __DIR__;
+        
+        $base = base_path();
+        //Checks if the command was executet inside the current directory or in the release directory
+        $in_current = str_ends_with(haystack: $base, needle: config('cdcleaner.current', 'current'));
         // web/current/App/Console/Commands/
-        if (strpos($commandFile, 'current') !== false) {
-            $neededDir = $commandFile . '/../../../../../releases';
-        } else {
-            $neededDir = $commandFile . '/../../../../../../releases';
+        $web_base = $base . (($in_current) ? '/..' : '/../..') . '/';
+        $release_base = realpath($web_base . config('cdcleaner.releases', 'releases'));
+        $current_link = str_replace($release_base . "/", "", readlink($web_base . config('cdcleaner.current', 'current')));
+
+        $prev_link = Cache::rememberForever("cdcleaner_last_release_dir", function() {
+            return null;
+        });
+
+        $scan = scandir($release_base);
+        unset($scan[0], $scan[1]);
+        if(($key = array_search(haystack: $scan, needle: $current_link)) !== FALSE) {
+            unset($scan[$key]);
         }
-        if (is_dir($neededDir)) {
-            $scan = scandir($neededDir);
-            unset($scan[0], $scan[1]);
-            sort($scan);
-            $prev_key = array_search(haystack: $scan, needle: $current);
-            $prev_key = ($prev_key && count($scan) > 1) ? $prev_key - 1 : $prev_key;
-            foreach ($scan as $key => $item) {
-                if ($current == $item || $key == $prev_key) {
-                    continue;
-                }
-                if (preg_match(pattern: '/^\d{14}$/', subject: $item)) {
-                    exec('rm -r -f ' . $neededDir . '/' . $item);
-                }
+        if($prev_link && ($key = array_search(haystack: $scan, needle: $prev_link)) !== FALSE) {
+            unset($scan[$prev_link]);
+        }
+        sort($scan);
+        $not_working = array_filter($scan, function($value) use ($current_link) {
+            return Carbon::createFromFormat("YmdHis", $value) > Carbon::createFromFormat("YmdHis", $current_link);
+        });
+        $scan = array_diff($scan, $not_working);
+        // - 1 for the last working version
+        $keep = config('cdcleaner.keep', 2) - 1;
+        $scan = array_splice($scan, 0, (-1 * $keep), null);
+        foreach ($scan as $key => $item) {
+            if (is_dir($release_base . "/" . $item) && preg_match(pattern: '/^\d{14}$/', subject: $item)) {
+                exec('rm -r -f ' .  $release_base . "/" . $item);
             }
         }
+
+        Cache::forever('cdcleaner_last_release_dir', $current_link);
+        
         $this->output->success('Deleted all old release directories.');
 
         return;
