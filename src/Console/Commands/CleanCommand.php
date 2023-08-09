@@ -41,6 +41,11 @@ class CleanCommand extends Command
             return null;
         });
 
+        if(!is_dir($release_base) || !is_dir($web_base)) {
+            $this->output->error('There is no web documentroot or a given release_base. Please provide one within your config or via the given env.');
+            return;
+        }
+
         $scan = scandir($release_base);
         unset($scan[0], $scan[1]);
         if(($key = array_search(haystack: $scan, needle: $current_link)) !== FALSE) {
@@ -57,15 +62,17 @@ class CleanCommand extends Command
         // - 1 for the last working version
         $keep = config('cdcleaner.keep', 2) - 1;
         $scan = array_splice($scan, 0, (-1 * $keep), null);
+        $counter = 0;
         foreach ($scan as $key => $item) {
             if (is_dir($release_base . "/" . $item) && preg_match(pattern: '/^\d{14}$/', subject: $item)) {
                 exec('rm -r -f ' .  $release_base . "/" . $item);
+                $counter++;
             }
         }
 
         Cache::forever('cdcleaner_last_release_dir', $current_link);
         
-        $this->output->success('Deleted all old release directories.');
+        $this->output->success('Deleted all old release directories. Number of deleted directories: ' . $counter);
 
         return;
     }
