@@ -4,7 +4,7 @@ namespace Emfits\CDCleaner\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class Clean extends Command
+class CleanCommand extends Command
 {
 
     /**

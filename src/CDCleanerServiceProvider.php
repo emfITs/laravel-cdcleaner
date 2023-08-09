@@ -2,6 +2,7 @@
 
 namespace Emfits\CDCleaner;
 
+use Emfits\CDCleaner\Console\Commands\CleanCommand;
 use Illuminate\Support\ServiceProvider;
 
 class CDCleanerServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class CDCleanerServiceProvider extends ServiceProvider
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
+            
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('cdcleaner.php'),
             ], 'config');
@@ -41,6 +43,11 @@ class CDCleanerServiceProvider extends ServiceProvider
 
             // Registering package commands.
             // $this->commands([]);
+            $this->commands(
+                [
+                    CleanCommand::class,
+                ]
+                );
         }
     }
 
