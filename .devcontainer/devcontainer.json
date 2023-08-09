@@ -1,6 +1,6 @@
 // https://aka.ms/devcontainer.json
 {
-	"name": "pleskdeployer (Extend)",
+	"name": "cdcleaner (Extend)",
 	"dockerComposeFile": [
 		"../docker-compose.yml"
 	],
