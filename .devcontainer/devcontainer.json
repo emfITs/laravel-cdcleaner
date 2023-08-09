@@ -1,0 +1,33 @@
+// https://aka.ms/devcontainer.json
+{
+	"name": "pleskdeployer (Extend)",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "laravel.test",
+	"workspaceFolder": "/var/www/html",
+	"settings": {},
+	"extensions": [
+		"onecentlin.laravel-extension-pack",
+		"xdebug.php-debug",
+		"bmewburn.vscode-intelephense-client",
+		"mikestead.dotenv",
+		"DEVSENSE.composer-php-vscode",
+		"christian-kohler.npm-intellisense",
+		"idered.npm",
+		"adrianwilczynski.alpine-js-intellisense",
+		"entexa.tall-stack",
+		"eamodio.gitlens",
+		"recca0120.vscode-phpunit",
+		"onecentlin.php-productive-pack",
+		"Gruntfuggly.todo-tree"
+	],
+    "mounts": [
+        "source=~/.ssh,target=/home/sail/.ssh,type=bind,consistency=cached"
+      ],
+	"remoteUser": "sail",
+	"postCreateCommand": "chown -R 1000:1000 /var/www/html"
+	// "forwardPorts": [],
+	// "runServices": [],
+	// "shutdownAction": "none",
+}
