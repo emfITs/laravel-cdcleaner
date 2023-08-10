@@ -69,7 +69,7 @@ class CleanCommand extends Command
             $scan = array_diff($scan, $not_working);
         }
         // - 1 for the last working version
-        $keep = config('cdcleaner.keep', 2);
+        $keep = config('cdcleaner.keep', 2) - (($prev_link) ? 1 : 0);
         $scan = array_splice($scan, 0, (-1 * $keep), null);
         $counter = 0;
         foreach ($scan as $key => $item) {
