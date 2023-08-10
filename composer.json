@@ -1,5 +1,5 @@
 {
-    "name": "emfITs/laravel-cdcleaner",
+    "name": "emf-its/laravel-cdcleaner",
     "description": "Cleaning up old releases that won't be needed anymore. ",
     "keywords": [
         "emfits",
