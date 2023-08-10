@@ -2,6 +2,6 @@
 
 All notable changes to `cdcleaner` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## 0.1.8 - 2023-08-10
 
 - initial release
