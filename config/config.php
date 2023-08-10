@@ -8,4 +8,5 @@ return [
     "releases" => env("CLEANER_RELEASES", "releases"),
     "web" => env("CLEANER_WEB", null),
     "keep" => env("CLEANER_KEEP", 2),
+    "keep_failed" => env("CLEANER_KEEP_FAILED", true)
 ];
