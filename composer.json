@@ -25,6 +25,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0|^8.0",
+        "pestphp/pest": "^2.13",
         "phpunit/phpunit": "^9.0|^10.0",
         "tightenco/duster": "^2.2"
     },
@@ -44,7 +45,10 @@
 
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "extra": {
         "laravel": {
