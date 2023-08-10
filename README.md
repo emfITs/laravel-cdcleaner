@@ -1,8 +1,8 @@
 # Handling old zero-downtime deployments for you
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/emfits/cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/cdcleaner)
-[![Total Downloads](https://img.shields.io/packagist/dt/emfits/cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/cdcleaner)
-![GitHub Actions](https://github.com/emfits/cdcleaner/actions/workflows/main.yml/badge.svg)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/emfits/laravel-cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/laravel-cdcleaner)
+[![Total Downloads](https://img.shields.io/packagist/dt/emfits/laravel-cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/cdcleaner)
+![GitHub Actions](https://github.com/emfITs/laravel-cdcleaner/actions/workflows/main.yml/badge.svg)
 
 Handling old release directories with this package. Especially using zero-downtime deployments with one release directory and a linked current directory.
 
