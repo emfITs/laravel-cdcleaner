@@ -3,6 +3,7 @@
 namespace Emfits\CDCleaner\Console\Commands;
 
 use Carbon\Carbon;
+use ErrorException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
@@ -34,14 +35,20 @@ class CleanCommand extends Command
         // web/current/App/Console/Commands/
         $web_base = $base . (($in_current) ? '/..' : '/../..') . '/';
         $release_base = realpath($web_base . config('cdcleaner.releases', 'releases'));
-        $current_link = str_replace($release_base . '/', '', readlink($web_base . config('cdcleaner.current', 'current')));
+        try {
+            $current_link = str_replace($release_base . '/', '', readlink($web_base . config('cdcleaner.current', 'current')));
+        }
+        catch(ErrorException) {
+            $this->output->error("Error while trying to read the link of your configured current directory.");
+            return;
+        }
 
         $prev_link = Cache::rememberForever('cdcleaner_last_release_dir', function () {
             return null;
         });
 
         if (! is_dir($release_base) || ! is_dir($web_base)) {
-            $this->output->error('There is no web documentroot or a given release_base. Please provide one within your config or via the given env.');
+            $this->output->error('There is no web documentroot or a given release_base. Please provide one within your config or with your .env file.');
 
             return;
         }

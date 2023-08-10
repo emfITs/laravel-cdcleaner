@@ -1,17 +1,30 @@
-# Very short description of the package
+# Handling old zero-downtime deployments for you
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/emfits/cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/cdcleaner)
 [![Total Downloads](https://img.shields.io/packagist/dt/emfits/cdcleaner.svg?style=flat-square)](https://packagist.org/packages/emfits/cdcleaner)
 ![GitHub Actions](https://github.com/emfits/cdcleaner/actions/workflows/main.yml/badge.svg)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Handling old release directories with this package. Especially using zero-downtime deployments with one release directory and a linked current directory.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require emfits/cdcleaner
+composer require emfits/laravel-cdcleaner
+```
+
+## Commands
+
+```bash
+php artisan emfits:cdcleaner:clean
+```
+
+## Configuration
+You can publish the config with:
+
+```bash
+php artisan vendor:publish --tag=cdcleaner-config
 ```
 
 ## Usage

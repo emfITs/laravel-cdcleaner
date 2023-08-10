@@ -17,7 +17,7 @@ class CDCleanerServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('cdcleaner.php'),
-            ], 'config');
+            ], ['config', 'cdcleaner-config']);
 
             $this->commands(
                 [
@@ -36,8 +36,8 @@ class CDCleanerServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'cdcleaner');
 
         // Register the main class to use with the facade
-        $this->app->singleton('cdcleaner', function () {
-            return new CDCleaner;
-        });
+        // $this->app->singleton('cdcleaner', function () {
+        //     return new CDCleaner;
+        // });
     }
 }
