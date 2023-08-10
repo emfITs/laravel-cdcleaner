@@ -1,11 +1,15 @@
 {
-    "name": "emfits/cdcleaner",
+    "name": "emfITs/laravel-cdcleaner",
     "description": "Cleaning up old releases that won't be needed anymore. ",
     "keywords": [
         "emfits",
-        "cdcleaner"
+        "cdcleaner",
+        "deployment",
+        "cleanup",
+        "releases",
+        "laravel"
     ],
-    "homepage": "https://github.com/emfits/cdcleaner",
+    "homepage": "https://github.com/emfITs/laravel-cdcleaner",
     "license": "MIT",
     "type": "library",
     "authors": [
