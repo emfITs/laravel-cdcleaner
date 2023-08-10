@@ -1,0 +1,9 @@
+{
+    "include": [
+        "src",
+        "config"
+    ],
+    "exclude": [
+        "tests/fixtures"
+    ]
+}
