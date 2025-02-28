@@ -10,7 +10,7 @@ class CDCleanerServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
 
         if ($this->app->runningInConsole()) {
@@ -30,7 +30,7 @@ class CDCleanerServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      */
-    public function register()
+    public function register(): void
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'cdcleaner');

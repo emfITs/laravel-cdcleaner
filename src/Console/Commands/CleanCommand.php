@@ -37,8 +37,7 @@ class CleanCommand extends Command
         $release_base = realpath($web_base . config('cdcleaner.releases', 'releases'));
         try {
             $current_link = str_replace($release_base . '/', '', readlink($web_base . config('cdcleaner.current', 'current')));
-        }
-        catch(ErrorException) {
+        } catch (ErrorException) {
             $this->output->error("Error while trying to read the link of your configured current directory.");
             return;
         }
@@ -63,7 +62,7 @@ class CleanCommand extends Command
         }
         sort($scan);
         if (! config('cdcleaner.keep_failed', true) && $prev_link) {
-            $not_working = array_filter($scan, function ($value) use ($prev_link) {
+            $not_working = array_filter($scan, function ($value) use ($prev_link): bool {
                 return Carbon::createFromFormat('YmdHis', $value) > Carbon::createFromFormat('YmdHis', $prev_link);
             });
             $scan = array_diff($scan, $not_working);
@@ -72,7 +71,7 @@ class CleanCommand extends Command
         $keep = config('cdcleaner.keep', 2) - (($prev_link) ? 1 : 0);
         $scan = array_splice($scan, 0, (-1 * $keep), null);
         $counter = 0;
-        foreach ($scan as $key => $item) {
+        foreach ($scan as $item) {
             if (is_dir($release_base . '/' . $item) && preg_match(pattern: '/^\d{14}$/', subject: $item)) {
                 exec('rm -r -f ' . $release_base . '/' . $item);
                 $counter++;
