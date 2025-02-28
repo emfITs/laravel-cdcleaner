@@ -19,11 +19,15 @@ jobs:
 
                 exclude:
                     - php: 8.1
-                      laravel: [11.*, 12.*]
+                      laravel: 11.*
+                    - php: 8.1
+                      laravel: 12.*
                     - php: 8.3
                       laravel: 9.*
                     - php: 8.4
-                      laravel: [9.*, 10.*]
+                      laravel: 9.*
+                    - php: 8.4
+                      laravel: 10.*
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
