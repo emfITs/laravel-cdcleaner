@@ -25,8 +25,7 @@
     "illuminate/console": "^8.0|^9.0|^10.0|^11.0|^12.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^7.0|^8.0|^9.0",
-    "pestphp/pest": "^2.13",
+    "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
     "phpunit/phpunit": "^9.0|^10.0",
     "tightenco/duster": "^2.2",
     "laravel/pint": "^1.19",
@@ -44,13 +43,13 @@
     }
   },
   "scripts": {
-    "test-coverage": "vendor/bin/pest --coverage-html coverage",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
     "refacto": "rector",
     "lint": "pint",
     "test:refacto": "rector --dry-run",
     "test:lint": "pint --test",
     "test:types": "phpstan analyse --ansi",
-    "test:unit": "pest",
+    "test:unit": "phpunit",
     "test": [
       "@test:refacto",
       "@test:lint",
