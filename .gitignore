@@ -2,3 +2,4 @@
 /vendor
 /docker
 /docker-compose.yml
+composer.lock
