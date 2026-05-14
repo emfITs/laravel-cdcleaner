@@ -106,4 +106,10 @@ class TestCase extends Orchestra
         File::deleteDirectory(__DIR__ . '/tmp');
         parent::tearDown();
     }
+
+    #[\Override]
+    protected function setUp(): void
+    {
+        $this->setUpTheTestEnvironment();
+    }
 }
