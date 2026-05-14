@@ -27,8 +27,8 @@
   "require-dev": {
     "laravel/pint": "^1.19",
     "orchestra/testbench": "^9.11",
-    "pestphp/pest": "^2.36",
-    "pestphp/pest-plugin-laravel": "^2.4",
+    "pestphp/pest": "^*",
+    "pestphp/pest-plugin-laravel": "*",
     "phpstan/phpstan": "^2.1",
     "rector/rector": "^2.0",
     "tightenco/duster": "^2.2"
