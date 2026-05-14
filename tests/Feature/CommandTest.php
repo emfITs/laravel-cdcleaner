@@ -27,6 +27,8 @@ it('can run the cleanup command with release path', function () {
     ];
     $cls->saveSuccessDirectories($success);
     foreach ($success as $path) {
+        echo ($cls->getReleasePath() . '/' . $path);
+
         mkdir($cls->getReleasePath() . '/' . $path);
     }
     $shouldBeDeleted = [
@@ -36,6 +38,8 @@ it('can run the cleanup command with release path', function () {
         $cls->getReleasePath() . '/20260205030405',
     ];
     foreach ($shouldBeDeleted as $path) {
+        echo ($path);
+
         mkdir($path);
     }
     // Storage::makeDirectory('cdcleaner');
@@ -64,6 +68,8 @@ it('can run the cleanup command with release path and keep failed', function () 
     ];
     $cls->saveSuccessDirectories($success);
     foreach ($success as $path) {
+        echo ($cls->getReleasePath() . '/' . $path);
+
         mkdir($cls->getReleasePath() . '/' . $path);
     }
     $shouldBeDeleted = [
@@ -73,6 +79,8 @@ it('can run the cleanup command with release path and keep failed', function () 
         $cls->getReleasePath() . '/20260205030405',
     ];
     foreach ($shouldBeDeleted as $path) {
+        echo ($path);
+
         mkdir($path);
     }
     // Storage::makeDirectory('cdcleaner');
@@ -130,6 +138,8 @@ it('do not keep failed', function () {
     ];
     $cls->saveSuccessDirectories($success);
     foreach ($success as $path) {
+        echo ($cls->getReleasePath() . '/' . $path);
+
         mkdir($cls->getReleasePath() . '/' . $path);
     }
     $shouldBeDeleted = [
@@ -139,6 +149,8 @@ it('do not keep failed', function () {
         $cls->getReleasePath() . '/20260205030405',
     ];
     foreach ($shouldBeDeleted as $path) {
+        echo ($path);
+
         mkdir($path);
     }
     Config::set('cdcleaner.keep_failed', false);
