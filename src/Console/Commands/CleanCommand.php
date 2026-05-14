@@ -3,9 +3,13 @@
 namespace Emfits\CDCleaner\Console\Commands;
 
 use Carbon\Carbon;
+use Emfits\CDCleaner\CDCleaner;
+use Emfits\CDCleaner\Exceptions\CouldNotReadLinkException;
 use ErrorException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class CleanCommand extends Command
 {
@@ -26,61 +30,30 @@ class CleanCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(CDCleaner $cdCleaner): ?int
     {
-
-        $base = base_path();
-        //Checks if the command was executet inside the current directory or in the release directory
-        $in_current = str_ends_with(haystack: $base, needle: config('cdcleaner.current', 'current'));
-        // web/current/App/Console/Commands/
-        $web_base = $base . (($in_current) ? '/..' : '/../..') . '/';
-        $release_base = realpath($web_base . config('cdcleaner.releases', 'releases'));
         try {
-            $current_link = str_replace($release_base . '/', '', readlink($web_base . config('cdcleaner.current', 'current')));
-        } catch (ErrorException) {
-            $this->output->error("Error while trying to read the link of your configured current directory.");
-            return;
-        }
-
-        $prev_link = Cache::rememberForever('cdcleaner_last_release_dir', function () {
-            return null;
-        });
-
-        if (! is_dir($release_base) || ! is_dir($web_base)) {
-            $this->output->error('There is no web documentroot or a given release_base. Please provide one within your config or with your .env file.');
-
-            return;
-        }
-
-        $scan = scandir($release_base);
-        unset($scan[0], $scan[1]);
-        if (($key = array_search(haystack: $scan, needle: $current_link)) !== false) {
-            unset($scan[$key]);
-        }
-        if ($prev_link && ($key = array_search(haystack: $scan, needle: $prev_link)) !== false) {
-            unset($scan[$prev_link]);
-        }
-        sort($scan);
-        if (! config('cdcleaner.keep_failed', true) && $prev_link) {
-            $not_working = array_filter($scan, function ($value) use ($prev_link): bool {
-                return Carbon::createFromFormat('YmdHis', $value) > Carbon::createFromFormat('YmdHis', $prev_link);
-            });
-            $scan = array_diff($scan, $not_working);
-        }
-        // - 1 for the last working version
-        $keep = config('cdcleaner.keep', 2) - (($prev_link) ? 1 : 0);
-        $scan = array_splice($scan, 0, (-1 * $keep), null);
-        $counter = 0;
-        foreach ($scan as $item) {
-            if (is_dir($release_base . '/' . $item) && preg_match(pattern: '/^\d{14}$/', subject: $item)) {
-                exec('rm -r -f ' . $release_base . '/' . $item);
-                $counter++;
+            if (!$cdCleaner->checkStructureAndPaths()) {
+                $this->output->error('There is no web documentroot or a given release_base. Please provide one within your config or with your .env file.');
+                return -1;
+            }
+            $counter = $cdCleaner->run();
+            $this->output->success('Deleted all old release directories. Number of deleted directories: ' . $counter);
+        } catch (Throwable $ex) {
+            if ($ex instanceof CouldNotReadLinkException) {
+                $this->output->error("Error while trying to read the link of your configured current directory.");
+                return -2;
+            } else {
+                $this->output->error($ex->getMessage() . "\n" . $ex->getTraceAsString());
+                return -3;
             }
         }
 
-        Cache::forever('cdcleaner_last_release_dir', $current_link);
 
-        $this->output->success('Deleted all old release directories. Number of deleted directories: ' . $counter);
-
+        return 0;
+        //  on readlinke
+        // $this->output->error("Error while trying to read the link of your configured current directory.");
+        // if release dir and web path are not existing
+        //Checks if the command was executet inside the current directory or in the release directory
     }
 }
